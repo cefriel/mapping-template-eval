@@ -1,0 +1,15 @@
+version: '2.2'
+
+services:
+  mapping-template:
+    image: cefriel/mapping-template
+    container_name: ${TEST_ID}
+    build:
+        context: ./
+    mem_limit: 96g
+    volumes:
+      - ./mappings/${MAPPINGS:-gtfs-csv-noselfjoin}.vm:/home/mappings/template.vm
+      - ./data/kgc-eval-distributions/csv/${SCALE}:/home/data/csv
+      - ./data/kgc-eval-distributions/xml/${SCALE}:/home/data/xml
+      - ./data/kgc-eval-distributions/json/${SCALE}:/home/data/json
+      - ./outbox/${TEST_ID}-${MAPPINGS}/${REP_ID:-1}:/home/out
