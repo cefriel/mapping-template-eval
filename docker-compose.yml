@@ -2,7 +2,7 @@ version: '2.2'
 
 services:
   mapping-template:
-    image: cefriel/mapping-template
+    image: cefriel/mapping-template:eval
     container_name: ${TEST_ID}
     build:
         context: ./
