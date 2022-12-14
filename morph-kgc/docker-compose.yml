@@ -1,0 +1,14 @@
+version: '2.2'
+
+services:
+  morph-kgc:
+    image: cefriel/mapping-template:morph
+    container_name: ${TEST_ID}
+    build:
+        context: ./
+    mem_limit: 96g
+    volumes:
+      - ./mappings/${MAPPINGS}.ttl:/home/mappings/mapping.ttl
+      - ./configs/${CONFIGS}.ini:/home/configs/config.ini
+      - ./data/kgc-eval-distributions/${FORMAT}/${SCALE}:/home/data
+      - ./outbox/${TEST_ID}-${MAPPINGS}/${REP_ID:-1}:/home/out
