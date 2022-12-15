@@ -64,10 +64,10 @@
 #foreach($row in $agencyData)
  ex:agency\/$row.agency_id a gtfs:Agency ;
  foaf:page <${row.agency_url}> ;
- foaf:name $row.agency_name ;
- gtfs:timeZone $row.agency_timezone ;
- gtfs:language $row.agency_lang ;
- gtfs:phone $row.agency_phone ;
+ foaf:name "$row.agency_name" ;
+ gtfs:timeZone "$row.agency_timezone" ;
+ dct:language "$row.agency_lang" ;
+ foaf:phone "$row.agency_phone" ;
  gtfs:fareUrl <${row.agency_fare_url}> .
 #end
 ## AGENCY END
@@ -78,9 +78,9 @@
 #end
 
 #foreach($row in $calendarDatesData)
- ex:metro\/services\/${row.service_id} gtfs:serviceRule ex:metro\/calendar_date_rule\/${row.service_id} .
+ ex:metro\/services\/${row.service_id} gtfs:serviceRule ex:metro\/calendar_date_rule\/${row.service_id}-${row.date} .
 
- ex:metro\/calendar_date_rule\/${row.service_id} a gtfs:CalendarDateRule ;
+ ex:metro\/calendar_date_rule\/${row.service_id}-${row.date} a gtfs:CalendarDateRule ;
  dct:date "$row.date"^^xsd:date ;
  gtfs:dateAddition "$row.exception_type"^^xsd:boolean .
 #end
@@ -128,7 +128,7 @@
 
 ## SHAPE POINTS
 #foreach($row in $shapeData)
- ex:metro\/shape\/${row.shape_id} gtfs:shapePoint <ex:metro/shape_point/${row.shape_id}-${row.shape_pt_sequence}> .
+ ex:metro\/shape\/${row.shape_id} gtfs:shapePoint ex:metro\/shape_point\/${row.shape_id}-${row.shape_pt_sequence} .
 
  ex:metro\/shape_point\/${row.shape_id}-${row.shape_pt_sequence} a gtfs:ShapePoint ;
  geo:lat "$row.shape_pt_lat"^^xsd:double ;
@@ -140,22 +140,22 @@
 
 ## STOPS
 #foreach($row in $stopsData)
- ex:\/stops\/$row.stop_id a gtfs:Stop ;
+ ex:metro\/stops\/$row.stop_id a gtfs:Stop ;
  gtfs:code "$row.stop_code" ;
  dct:identifier "$row.stop_id" ;
  foaf:name "$row.stop_name" ;
  dct:description "$row.stop_desc" ;
  geo:lat "$row.stop_lat"^^xsd:double ;
  geo:long "$row.stop_lon"^^xsd:double ;
- gtfs:zone "$row.zone_id" ;
  foaf:page <${row.stop_url}> ;
  gtfs:locationType <http://transport.linkeddata.es/resource/LocationType/${row.location_type}> ;
- gtfs:timeZone "$row.stop_timezone" ;
+ #if($row.zone_id)gtfs:zone "$row.zone_id" ;#end
+ #if($row.stop_timezone)gtfs:timeZone "$row.stop_timezone" ;#end
  
  ## do by list
  #if($functions.checkString($row.parent_station))
   #set($pStop = $functions.getMapValue($mStops, $row.parent_station))
-  gtfs:parentStation ex:stops\/$pStop.stop_id ;
+  gtfs:parentStation ex:metro\/stops\/$pStop.stop_id ;
  #end
 
  gtfs:wheelchairAccessible <http://transport.linkeddata.es/resource/WheelchairBoardingStatus/${row.wheelchair_boarding}> .
@@ -176,7 +176,7 @@
  ## do by list
  #if($functions.checkString($row.agency_id))
   #set($tAgency = $functions.getMapValue($mAgency, $row.agency_id))
-  gtfs:agency ex:\/agency\/$tAgency.agency_id ;
+  gtfs:agency ex:agency\/$tAgency.agency_id ;
  #end
 
  gtfs:textColor "$row.route_text_color" .
@@ -206,7 +206,7 @@
 
  #if($functions.checkString($row.shape_id))
   #set($tShape = $functions.getMapValue($mShapes, $row.shape_id))
-  gtfs:shape ex:metro\/shape_point\/$tShape.shape_id ;
+  gtfs:shape ex:metro\/shape\/$tShape.shape_id ;
  #end
 
  gtfs:wheelchairAccessible <http://transport.linkeddata.es/resource/WheelchairBoardingStatus/${row.wheelchair_accessible}> .
@@ -219,7 +219,7 @@
  ex:metro\/stoptimes\/${row.trip_id}-${row.stop_id}-${row.arrival_time} rdf:type gtfs:StopTime ;
  gtfs:arrivalTime "$row.arrival_time"^^xsd:duration ;
  gtfs:departureTime "$row.departure_time"^^xsd:duration ;
- gtfs:stopSequence "$row.stop_sequence"^^xsd:integer ;
+ #if($row.stop_sequence)gtfs:stopSequence "$row.stop_sequence"^^xsd:integer ;#end
  gtfs:headsign "$row.stop_headsign" ;
  gtfs:pickupType <http://transport.linkeddata.es/resource/PickupType/${row.pickup_type}> ;
  gtfs:dropOffType <http://transport.linkeddata.es/resource/DropOffType/${row.drop_off_type}> ;
