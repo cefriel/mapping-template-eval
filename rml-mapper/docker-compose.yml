@@ -1,0 +1,13 @@
+version: '2.2'
+
+services:
+  rmlmapper:
+    image: cefriel/mapping-template:rmlmapper
+    container_name: ${TEST_ID}
+    build:
+        context: ./
+    mem_limit: 72g
+    volumes:
+      - ./mappings/${MAPPINGS}.ttl:/home/mappings/mapping.ttl
+      - ./data/kgc-eval-distributions/${FORMAT}/${SCALE}:/home/data
+      - ./outbox/${TEST_ID}-${MAPPINGS}/${REP_ID:-1}:/home/out
