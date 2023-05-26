@@ -24,7 +24,7 @@ def organize_data(data, engines, mappings):
         else:
             next
     
-    ordered_data = pd.DataFrame(columns = mappings, index=engines)
+    ordered_data = pd.DataFrame(columns = mappings, index = engines)
     for i in range(0, len(average_data)):
         for j in range(0, len(ordered_data.index)):
             for k in range(0,len(ordered_data.columns)):
@@ -38,7 +38,7 @@ def organize_data(data, engines, mappings):
 def plot(data, scale):
 
     # Create dataframe     
-    engines = ['rmlmapper', 'morph-kgc', 'mapping-template', 'mapping-template-nj']
+    engines = ['rmlmapper', 'morph-kgc', 'morph-kgc-p', 'mapping-template', 'mapping-template-nj']
     mappings = ['gtfs-csv', 'gtfs-xml', 'gtfs-json']
     ordered_data = organize_data(data, [x.lower() for x in engines], mappings)
 
@@ -50,25 +50,29 @@ def plot(data, scale):
     r2 = [x + barWidth for x in r1]
     r3 = [x + barWidth * 2 for x in r1]
     r4 = [x + barWidth * 3 for x in r1]
+    r5 = [x + barWidth * 4 for x in r1]
 
     plt.bar(r1, ordered_data.values.tolist()[0], width=barWidth, color='#F2BABA',#F2BABA
                 label='rmlmapper')
     plt.bar(r2, ordered_data.values.tolist()[1], width=barWidth, color='#A46593',#A46593
                 label='morph-kgc')
-    plt.bar(r3, ordered_data.values.tolist()[2], width=barWidth, color='#2862CC',#2862CC
+    plt.bar(r3, ordered_data.values.tolist()[2], width=barWidth, color='#90AFE9',#A5D9A5
+                label='morph-kgc-p')
+    plt.bar(r4, ordered_data.values.tolist()[3], width=barWidth, color='#2862CC',#2862CC
                 label='mapping-template')
-    plt.bar(r4, ordered_data.values.tolist()[3], width=barWidth, color='#90AFE9',#90AFE9
+    plt.bar(r5, ordered_data.values.tolist()[4], width=barWidth, color='#A5D9A5',#90AFE9
                 label='mapping-template-nj')
+    
 
 
-    plt.xticks([r + barWidth*2.5  for r in range(len(r1))], mappings, fontsize=12)
+    plt.xticks([r + barWidth*2.5  for r in range(len(r1))], mappings, fontsize=16)
 
-    plt.yticks(np.arange(0, 9), ('0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', 'OutOfMemory'), fontsize=12)
+    plt.yticks(np.arange(0, 9), ('0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', 'OutOfMemory'), fontsize=16)
     plt.ylim(top= math.log10(100000000))
-    plt.ylabel("Maximum memory (log$_{10}$(kB))", fontsize=12) #(log$_{10}$(kB))
-    plt.xlabel("Mapping", fontsize=12)
+    plt.ylabel("Maximum memory (log$_{10}$(kB))", fontsize=18, labelpad=10) #(log$_{10}$(kB))
+    plt.xlabel(scale, fontsize=18, labelpad=10)
  
-    plt.legend(engines, loc='lower center', prop={'size': 10}, ncol=4, bbox_to_anchor=(0.4, -0.34))
+    #plt.legend(engines, loc='lower center', prop={'size': 10}, ncol=4, bbox_to_anchor=(0.4, -0.34))
         
     plt.savefig("./figures/memory_" + scale + ".png", bbox_inches='tight', dpi=700)
 
