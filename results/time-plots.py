@@ -70,7 +70,10 @@ def plot(data, scale, overhead = False):
 
     plt.yticks(np.arange(0, 7), ('0.0', '1.0', '2.0', '3.0', '4.0', '5.0', 'Timeout'), fontsize=16)
     plt.ylim(top=math.log10(1000000))
-    plt.ylabel("Time (log$_{10}$(s))", fontsize=18, labelpad=10)
+    ylabel = "Execution Time"
+    if overhead:
+        ylabel = "Total Time"
+    plt.ylabel(ylabel + " (log$_{10}$(s))", fontsize=18, labelpad=10)
     plt.xlabel(scale, fontsize=18, labelpad=10)
  
     #plt.legend(engines, loc='lower center', prop={'size': 24}, ncol=5, bbox_to_anchor=(0.4, -0.5))

@@ -67,7 +67,7 @@ def plot(data, scale):
 
     plt.xticks([r + barWidth*2.5  for r in range(len(r1))], mappings, fontsize=16)
 
-    plt.yticks(np.arange(0, 9), ('0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', 'OutOfMemory'), fontsize=16)
+    plt.yticks(np.arange(0, 9), ('0.0', '1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', 'OutOfMem'), fontsize=16)
     plt.ylim(top= math.log10(100000000))
     plt.ylabel("Maximum memory (log$_{10}$(kB))", fontsize=18, labelpad=10) #(log$_{10}$(kB))
     plt.xlabel(scale, fontsize=18, labelpad=10)
