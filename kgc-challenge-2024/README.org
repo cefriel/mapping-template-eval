@@ -1,0 +1,6 @@
+* Istruzioni
+
+Ogni cartella corrisponde ad una cartella/case da eseguire sulla vm
+nella cartella ../downloads/eswc-kgc-challenge-2024. Il file di
+template va messo nella cartella 'data', allo stesso livello della
+cartella 'data' va messo il file 'metadata.json'.

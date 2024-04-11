@@ -1,0 +1,183 @@
+## db connection details are passed as cli args. from the same reader get
+## a dataframe for each sql table.
+
+#set ($agencyReader = $functions.getCSVReaderFromFile("/data/shared/AGENCY.csv"))
+#set ($agencyData = $agencyReader.getDataframe())
+
+#set ($calendarDatesData = $reader.getDataframe("SELECT * FROM calendar_dates"))
+#set ($mCalendarDates = $functions.getMap($calendarDatesData, "service_id"))
+
+#set ($calendarData = $reader.getDataframe("SELECT * FROM calendar"))
+#set ($mCalendar = $functions.getMap($calendarData, "service_id"))
+
+#set ($feedReader = $functions.getCSVReaderFromFile("/data/shared/FEED_INFO.csv"))
+#set ($feedData = $feedReader.getDataframe())
+
+#set ($shapeData = $reader.getDataframe("SELECT * FROM shapes"))
+#set ($mShapes = $functions.getMap($shapeData, "shape_id"))
+
+#set ($stopsData = $reader.getDataframe("SELECT * FROM stops"))
+
+#set ($routesData = $reader.getDataframe("SELECT * FROM routes"))
+
+#set ($tripsData = $reader.getDataframe("SELECT * FROM trips"))
+
+#set ($stopTimesReader = $functions.getCSVReaderFromFile("/data/shared/STOP_TIMES.csv"))
+#set ($stopTimesData = $stopsTimesReader.getDataframe())
+
+#set ($frequenciesReader = $functions.getCSVReaderFromFile("/data/shared/FREQUENCIES.csv"))
+#set ($frequenciesData = $frequenciesReader.getDataframe())
+
+## AGENCY
+#foreach($row in $agencyData)
+ <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Agency> .
+ <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://xmlns.com/foaf/0.1/page> <${row.agency_url}> .
+ <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://xmlns.com/foaf/0.1/name> "$row.agency_name" .
+ <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://vocab.gtfs.org/terms#timeZone> "$row.agency_timezone" .
+ <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://purl.org/dc/terms/language> "$row.agency_lang" .
+ <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://xmlns.com/foaf/0.1/phone> "$row.agency_phone" .
+ <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://vocab.gtfs.org/terms#fareUrl> <${row.agency_fare_url}> .
+#end
+## AGENCY END
+
+## CALENDAR DATES
+#foreach($service_id in $mCalendarDates.keySet())
+ <http://transport.linkeddata.es/madrid/metro/services/${service_id}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Service> .
+#end
+
+#foreach($row in $calendarDatesData)
+ <http://transport.linkeddata.es/madrid/metro/services/${row.service_id}> <http://vocab.gtfs.org/terms#serviceRule> <http://transport.linkeddata.es/madrid/metro/calendar_date_rule/${row.service_id}-${row.date}> .
+
+ <http://transport.linkeddata.es/madrid/metro/calendar_date_rule/${row.service_id}-${row.date}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#CalendarDateRule> .
+ <http://transport.linkeddata.es/madrid/metro/calendar_date_rule/${row.service_id}-${row.date}> <http://purl.org/dc/terms/date> "$row.date"^^<http://www.w3.org/2001/XMLSchema#date> .
+ <http://transport.linkeddata.es/madrid/metro/calendar_date_rule/${row.service_id}-${row.date}> <http://vocab.gtfs.org/terms#dateAddition> "$row.exception_type"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+#end
+## CALENDAR DATES END
+
+## CALENDAR
+#foreach($service_id in $mCalendar.keySet())
+ <http://transport.linkeddata.es/madrid/metro/services/${service_id}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Service> .
+#end
+
+#foreach($row in $calendarData)
+ <http://transport.linkeddata.es/madrid/metro/services/${row.service_id}> <http://vocab.gtfs.org/terms#serviceRule> <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> .
+
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#CalendarRule> .
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://vocab.gtfs.org/terms#monday> "$row.monday"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://vocab.gtfs.org/terms#tuesday> "$row.tuesday"^^<http://www.w3.org/2001/XMLSchema#boolean>  .
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://vocab.gtfs.org/terms#wednesday> "$row.wednesday"^^<http://www.w3.org/2001/XMLSchema#boolean>  .
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://vocab.gtfs.org/terms#thursday> "$row.thursday"^^<http://www.w3.org/2001/XMLSchema#boolean>  .
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://vocab.gtfs.org/terms#friday> "$row.friday"^^<http://www.w3.org/2001/XMLSchema#boolean>  .
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://vocab.gtfs.org/terms#saturday> "$row.saturday"^^<http://www.w3.org/2001/XMLSchema#boolean>  .
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://vocab.gtfs.org/terms#sunday> "$row.sunday"^^<http://www.w3.org/2001/XMLSchema#boolean>  .
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://schema.org/startDate> "$row.start_date"^^<http://www.w3.org/2001/XMLSchema#date>  .
+ <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://schema.org/endDate> "$row.end_date"^^<http://www.w3.org/2001/XMLSchema#date> .
+#end
+## CALENDAR END
+
+## FEED
+#foreach($row in $feedData)
+ <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Feed> .
+ <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://purl.org/dc/terms/publisher> "$row.feed_publisher_name" .
+ <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://xmlns.com/foaf/0.1/page> <$row.feed_publisher_url> .
+ <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://purl.org/dc/terms/language> "$row.feed_lang" .
+ <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://schema.org/startDate> "$row.feed_start_date"^^<http://www.w3.org/2001/XMLSchema#date> .
+ <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://schema.org/endDate> "$row.feed_end_date"^^<http://www.w3.org/2001/XMLSchema#date> .
+ <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://schema.org/version> "$row.feed_version" .
+#end
+## FEED END
+
+## SHAPE
+#foreach($shape_id in $mShapes.keySet())
+ <http://transport.linkeddata.es/madrid/metro/shape/${shape_id}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Shape> .
+#end
+## SHAPE END
+
+## SHAPE POINTS
+#foreach($row in $shapeData)
+ <http://transport.linkeddata.es/madrid/metro/shape/${row.shape_id}> <http://vocab.gtfs.org/terms#shapePoint> <http://transport.linkeddata.es/madrid/metro/shape_point/${row.shape_id}-${row.shape_pt_sequence}> .
+
+ <http://transport.linkeddata.es/madrid/metro/shape_point/${row.shape_id}-${row.shape_pt_sequence}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#ShapePoint> .
+ <http://transport.linkeddata.es/madrid/metro/shape_point/${row.shape_id}-${row.shape_pt_sequence}> <http://www.w3.org/2003/01/geo/wgs84_pos#lat> "$row.shape_pt_lat"^^<http://www.w3.org/2001/XMLSchema#double> .
+ <http://transport.linkeddata.es/madrid/metro/shape_point/${row.shape_id}-${row.shape_pt_sequence}> <http://www.w3.org/2003/01/geo/wgs84_pos#long> "$row.shape_pt_lon"^^<http://www.w3.org/2001/XMLSchema#double> .
+ <http://transport.linkeddata.es/madrid/metro/shape_point/${row.shape_id}-${row.shape_pt_sequence}> <http://vocab.gtfs.org/terms#pointSequence> "$row.shape_pt_sequence" .
+ <http://transport.linkeddata.es/madrid/metro/shape_point/${row.shape_id}-${row.shape_pt_sequence}> <http://vocab.gtfs.org/terms#distanceTraveled> "$row.shape_dist_traveled" .
+#end
+## SHAPE POINTS END
+
+## STOPS
+#foreach($row in $stopsData)
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Stop> .
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://vocab.gtfs.org/terms#code> "$row.stop_code" .
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://purl.org/dc/terms/identifier> "$row.stop_id" .
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://xmlns.com/foaf/0.1/name> "$row.stop_name" .
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://purl.org/dc/terms/description> "$row.stop_desc" .
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://www.w3.org/2003/01/geo/wgs84_pos#lat> "$row.stop_lat"^^<http://www.w3.org/2001/XMLSchema#double> .
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://www.w3.org/2003/01/geo/wgs84_pos#long> "$row.stop_lon"^^<http://www.w3.org/2001/XMLSchema#double> .
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://xmlns.com/foaf/0.1/page> <${row.stop_url}> .
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://vocab.gtfs.org/terms#locationType> <http://transport.linkeddata.es/resource/LocationType/${row.location_type}> .
+ #if($row.zone_id)<http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://vocab.gtfs.org/terms#zone> "$row.zone_id" . #end
+ 
+ #if($row.stop_timezone)<http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://vocab.gtfs.org/terms#timeZone> "$row.stop_timezone" . #end
+ 
+
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://vocab.gtfs.org/terms#parentStation> <http://transport.linkeddata.es/madrid/metro/stops/$row.stop_id> .
+ <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://vocab.gtfs.org/terms#wheelchairAccessible> <http://transport.linkeddata.es/resource/WheelchairBoardingStatus/${row.wheelchair_boarding}> .
+#end
+## STOPS END
+
+## ROUTES
+#foreach($row in $routesData)
+ <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Route> .
+ <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://vocab.gtfs.org/terms#shortName> "$row.route_short_name" .
+ <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://vocab.gtfs.org/terms#longName> "$row.route_long_name" .
+ <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://purl.org/dc/terms/description> "$row.route_desc" .
+ <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://vocab.gtfs.org/terms#routeType> <http://transport.linkeddata.es/resource/RouteType/${row.route_type}> .
+ <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id>  <http://vocab.gtfs.org/terms#routeUrl> <${row.route_url}> .
+ <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://vocab.gtfs.org/terms#color> "$row.route_color" .
+ <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://vocab.gtfs.org/terms#agency> <http://transport.linkeddata.es/madrid/agency/$row.agency_id> .
+ <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://vocab.gtfs.org/terms#textColor> "$row.route_text_color" .
+#end
+## ROUTES END
+
+## TRIPS
+#foreach($row in $tripsData)
+ <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Trip> .
+ <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#headsign> "$row.trip_headsign" .
+ <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#shortName> "$row.trip_short_name" .
+ <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#direction> "$row.direction_id" .
+ <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#block> "$row.block_id" .
+ <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#service> <http://transport.linkeddata.es/madrid/metro/services/$row.service_id> .
+ <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#route> <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> .
+ <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#shape> <http://transport.linkeddata.es/madrid/metro/shape/$row.shape_id> .
+ <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#wheelchairAccessible> <http://transport.linkeddata.es/resource/WheelchairBoardingStatus/${row.wheelchair_accessible}> .
+#end
+## TRIPS END
+
+## STOP TIMES
+#foreach($row in $stopTimesData)
+ <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#StopTime> .
+ <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#arrivalTime> "$row.arrival_time"^^<http://www.w3.org/2001/XMLSchema#duration> .
+ <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#departureTime> "$row.departure_time"^^<http://www.w3.org/2001/XMLSchema#duration> .
+ 
+ #if($row.stop_sequence)<http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#stopSequence> "$row.stop_sequence"^^<http://www.w3.org/2001/XMLSchema#integer> .#end
+ 
+ <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#headsign> "$row.stop_headsign" .
+ <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#pickupType> <http://transport.linkeddata.es/resource/PickupType/${row.pickup_type}> .
+ <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#dropOffType> <http://transport.linkeddata.es/resource/DropOffType/${row.drop_off_type}> .
+ <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#trip> <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> .
+ <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms\#stop> <http://transport.linkeddata.es/madrid/metro/stops/$row.stop_id> .
+ <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#distanceTraveled> "${row.shape_dist_traveled}" .
+#end
+## STOP TIMES END
+
+## FREQUENCIES
+#foreach($row in $frequenciesData)
+ <http://transport.linkeddata.es/madrid/metro/frequency/${row.trip_id}-${row.start_time}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Frequency> .
+ <http://transport.linkeddata.es/madrid/metro/frequency/${row.trip_id}-${row.start_time}> <http://vocab.gtfs.org/terms#startTime> "$row.start_time" .
+ <http://transport.linkeddata.es/madrid/metro/frequency/${row.trip_id}-${row.start_time}> <http://vocab.gtfs.org/terms#endTime> "$row.end_time" .
+ <http://transport.linkeddata.es/madrid/metro/frequency/${row.trip_id}-${row.start_time}> <http://vocab.gtfs.org/terms#headwaySeconds> "$row.headway_secs"^^<http://www.w3.org/2001/XMLSchema#integer> .
+ <http://transport.linkeddata.es/madrid/metro/frequency/${row.trip_id}-${row.start_time}> <http://vocab.gtfs.org/terms#trip> <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> .
+ <http://transport.linkeddata.es/madrid/metro/frequency/${row.trip_id}-${row.start_time}> <http://vocab.gtfs.org/terms#exactTimes> "$row.exact_times"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+#end
+## FREQUENCIES END
