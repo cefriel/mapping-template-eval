@@ -1,0 +1,60 @@
+prefixes:
+  brick: https://brickschema.org/schema/Brick#
+  csvw: http://www.w3.org/ns/csvw#
+  dc: http://purl.org/dc/elements/1.1/
+  dcat: http://www.w3.org/ns/dcat#
+  dcmitype: http://purl.org/dc/dcmitype/
+  dcterms: http://purl.org/dc/terms/
+  dcam: http://purl.org/dc/dcam/
+  doap: http://usefulinc.com/ns/doap#
+  foaf: http://xmlns.com/foaf/0.1/
+  geo: http://www.opengis.net/ont/geosparql#
+  odrl: http://www.w3.org/ns/odrl/2/
+  org: http://www.w3.org/ns/org#
+  prof: http://www.w3.org/ns/dx/prof/
+  prov: http://www.w3.org/ns/prov#
+  qb: http://purl.org/linked-data/cube#
+  schema: https://schema.org/
+  sh: http://www.w3.org/ns/shacl#
+  skos: http://www.w3.org/2004/02/skos/core#
+  sosa: http://www.w3.org/ns/sosa/
+  ssn: http://www.w3.org/ns/ssn/
+  time: http://www.w3.org/2006/time#
+  vann: http://purl.org/vocab/vann/
+  void: http://rdfs.org/ns/void#
+  wgs: https://www.w3.org/2003/01/geo/wgs84_pos#
+  owl: http://www.w3.org/2002/07/owl#
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  xml: http://www.w3.org/XML/1998/namespace
+  ex: http://example.com/
+  rr: http://www.w3.org/ns/r2rml#
+  rml: http://semweb.mmlab.be/ns/rml#
+  ql: http://semweb.mmlab.be/ns/ql#
+mappings:
+  TriplesMap1:
+    sources:
+    - table: data
+    s: http://ex.com/table/$(id)
+    po:
+    - [ex:p11, $(p11)]
+    - [ex:p18, $(p18)]
+    - [ex:p19, $(p19)]
+    - [ex:p1, $(p1)]
+    - [ex:p9, $(p9)]
+    - [ex:p3, $(p3)]
+    - [ex:p15, $(p15)]
+    - [ex:p8, $(p8)]
+    - [ex:p13, $(p13)]
+    - [ex:p6, $(p6)]
+    - [ex:p10, $(p10)]
+    - [ex:p12, $(p12)]
+    - [ex:p14, $(p14)]
+    - [ex:p7, $(p7)]
+    - [ex:p17, $(p17)]
+    - [ex:p2, $(p2)]
+    - [ex:p4, $(p4)]
+    - [ex:p5, $(p5)]
+    - [ex:p20, $(p20)]
+    - [ex:p16, $(p16)]

@@ -1,0 +1,4 @@
+#set ($data = $reader.getDataframe("SELECT * FROM data"))
+#foreach ($r in $data)
+<http://ex.com/table/$r.id> <http://example.com/p1> "$r.p1" .
+#end

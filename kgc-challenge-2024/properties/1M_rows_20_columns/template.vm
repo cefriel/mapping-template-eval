@@ -1,0 +1,13 @@
+#set ($data = $reader.getDataframe("SELECT * FROM data"))
+#foreach ($r in $data)
+<http://ex.com/table/$r.id> <http://example.com/p1> "$r.p1" .
+<http://ex.com/table/$r.id> <http://example.com/p2> "$r.p2" .
+<http://ex.com/table/$r.id> <http://example.com/p3> "$r.p3" .
+<http://ex.com/table/$r.id> <http://example.com/p4> "$r.p4" .
+<http://ex.com/table/$r.id> <http://example.com/p5> "$r.p5" .
+<http://ex.com/table/$r.id> <http://example.com/p6> "$r.p6" .
+<http://ex.com/table/$r.id> <http://example.com/p7> "$r.p7" .
+<http://ex.com/table/$r.id> <http://example.com/p8> "$r.p8" .
+<http://ex.com/table/$r.id> <http://example.com/p9> "$r.p9" .
+<http://ex.com/table/$r.id> <http://example.com/p10> "$r.p10" .
+#end

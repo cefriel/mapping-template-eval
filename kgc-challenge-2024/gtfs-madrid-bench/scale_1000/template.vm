@@ -1,31 +1,9 @@
 ## db connection details are passed as cli args. from the same reader get
 ## a dataframe for each sql table.
 
-#set ($agencyData = $reader.getDataframe("SELECT * FROM agency"))
-
-#set ($calendarDatesData = $reader.getDataframe("SELECT * FROM calendar_dates"))
-#set ($mCalendarDates = $functions.getMap($calendarDatesData, "service_id"))
-
-#set ($calendarData = $reader.getDataframe("SELECT * FROM calendar"))
-#set ($mCalendar = $functions.getMap($calendarData, "service_id"))
-
-#set ($feedData = $reader.getDataframe("SELECT * FROM feed_info"))
-
-#set ($shapeData = $reader.getDataframe("SELECT * FROM shapes"))
-#set ($mShapes = $functions.getMap($shapeData, "shape_id"))
-
-#set ($stopsData = $reader.getDataframe("SELECT * FROM stops"))
-
-#set ($routesData = $reader.getDataframe("SELECT * FROM routes"))
-
-#set ($tripsData = $reader.getDataframe("SELECT * FROM trips"))
-
-#set ($stopTimesData = $reader.getDataframe("SELECT * FROM stop_times"))
-
-#set ($frequenciesData = $reader.getDataframe("SELECT * FROM frequencies"))
-
 ## AGENCY
-#foreach($row in $agencyData)
+#set ($df = $reader.getDataframe("SELECT * FROM agency"))
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Agency> .
  <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://xmlns.com/foaf/0.1/page> <${row.agency_url}> .
  <http://transport.linkeddata.es/madrid/agency/$row.agency_id> <http://xmlns.com/foaf/0.1/name> "$row.agency_name" .
@@ -37,11 +15,14 @@
 ## AGENCY END
 
 ## CALENDAR DATES
-#foreach($service_id in $mCalendarDates.keySet())
+#set ($df = $reader.getDataframe("SELECT * FROM calendar_dates"))
+#set ($mdf = $functions.getMap($df, "service_id"))
+
+#foreach($service_id in $mdf.keySet())
  <http://transport.linkeddata.es/madrid/metro/services/${service_id}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Service> .
 #end
 
-#foreach($row in $calendarDatesData)
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid/metro/services/${row.service_id}> <http://vocab.gtfs.org/terms#serviceRule> <http://transport.linkeddata.es/madrid/metro/calendar_date_rule/${row.service_id}-${row.date}> .
 
  <http://transport.linkeddata.es/madrid/metro/calendar_date_rule/${row.service_id}-${row.date}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#CalendarDateRule> .
@@ -51,11 +32,14 @@
 ## CALENDAR DATES END
 
 ## CALENDAR
-#foreach($service_id in $mCalendar.keySet())
+#set ($df = $reader.getDataframe("SELECT * FROM calendar"))
+#set ($mdf = $functions.getMap($df, "service_id"))
+
+#foreach($service_id in $mdf.keySet())
  <http://transport.linkeddata.es/madrid/metro/services/${service_id}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Service> .
 #end
 
-#foreach($row in $calendarData)
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid/metro/services/${row.service_id}> <http://vocab.gtfs.org/terms#serviceRule> <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> .
 
  <http://transport.linkeddata.es/madrid/metro/calendar_rules/${row.service_id}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#CalendarRule> .
@@ -72,7 +56,8 @@
 ## CALENDAR END
 
 ## FEED
-#foreach($row in $feedData)
+#set ($df = $reader.getDataframe("SELECT * FROM feed_info"))
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Feed> .
  <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://purl.org/dc/terms/publisher> "$row.feed_publisher_name" .
  <http://transport.linkeddata.es/madrid/metro/feed/${row.feed_publisher_name}> <http://xmlns.com/foaf/0.1/page> <$row.feed_publisher_url> .
@@ -84,13 +69,15 @@
 ## FEED END
 
 ## SHAPE
-#foreach($shape_id in $mShapes.keySet())
+#set ($df = $reader.getDataframe("SELECT * FROM shapes"))
+#set ($mdf = $functions.getMap($df, "shape_id"))
+#foreach($shape_id in $mdf.keySet())
  <http://transport.linkeddata.es/madrid/metro/shape/${shape_id}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Shape> .
 #end
 ## SHAPE END
 
 ## SHAPE POINTS
-#foreach($row in $shapeData)
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid/metro/shape/${row.shape_id}> <http://vocab.gtfs.org/terms#shapePoint> <http://transport.linkeddata.es/madrid/metro/shape_point/${row.shape_id}-${row.shape_pt_sequence}> .
 
  <http://transport.linkeddata.es/madrid/metro/shape_point/${row.shape_id}-${row.shape_pt_sequence}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#ShapePoint> .
@@ -102,7 +89,8 @@
 ## SHAPE POINTS END
 
 ## STOPS
-#foreach($row in $stopsData)
+#set ($df = $reader.getDataframe("SELECT * FROM stops"))
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Stop> .
  <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://vocab.gtfs.org/terms#code> "$row.stop_code" .
  <http://transport.linkeddata.es/madrid//stops/$row.stop_id> <http://purl.org/dc/terms/identifier> "$row.stop_id" .
@@ -123,7 +111,8 @@
 ## STOPS END
 
 ## ROUTES
-#foreach($row in $routesData)
+#set ($df = $reader.getDataframe("SELECT * FROM routes"))
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Route> .
  <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://vocab.gtfs.org/terms#shortName> "$row.route_short_name" .
  <http://transport.linkeddata.es/madrid/metro/routes/$row.route_id> <http://vocab.gtfs.org/terms#longName> "$row.route_long_name" .
@@ -137,7 +126,8 @@
 ## ROUTES END
 
 ## TRIPS
-#foreach($row in $tripsData)
+#set ($df = $reader.getDataframe("SELECT * FROM trips"))
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Trip> .
  <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#headsign> "$row.trip_headsign" .
  <http://transport.linkeddata.es/madrid/metro/trips/$row.trip_id> <http://vocab.gtfs.org/terms#shortName> "$row.trip_short_name" .
@@ -151,7 +141,8 @@
 ## TRIPS END
 
 ## STOP TIMES
-#foreach($row in $stopTimesData)
+#set ($df = $reader.getDataframe("SELECT * FROM stop_times"))
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#StopTime> .
  <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#arrivalTime> "$row.arrival_time"^^<http://www.w3.org/2001/XMLSchema#duration> .
  <http://transport.linkeddata.es/madrid/metro/stoptimes/${row.trip_id}-${row.stop_id}-${row.arrival_time}> <http://vocab.gtfs.org/terms#departureTime> "$row.departure_time"^^<http://www.w3.org/2001/XMLSchema#duration> .
@@ -168,7 +159,8 @@
 ## STOP TIMES END
 
 ## FREQUENCIES
-#foreach($row in $frequenciesData)
+#set ($df = $reader.getDataframe("SELECT * FROM frequencies"))
+#foreach($row in $df)
  <http://transport.linkeddata.es/madrid/metro/frequency/${row.trip_id}-${row.start_time}> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://vocab.gtfs.org/terms#Frequency> .
  <http://transport.linkeddata.es/madrid/metro/frequency/${row.trip_id}-${row.start_time}> <http://vocab.gtfs.org/terms#startTime> "$row.start_time" .
  <http://transport.linkeddata.es/madrid/metro/frequency/${row.trip_id}-${row.start_time}> <http://vocab.gtfs.org/terms#endTime> "$row.end_time" .
