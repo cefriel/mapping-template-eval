@@ -1,6 +1,3 @@
-* Istruzioni
+* Instructions
 
-Ogni cartella corrisponde ad una cartella/case da eseguire sulla vm
-nella cartella ../downloads/eswc-kgc-challenge-2024. Il file di
-template va messo nella cartella 'data', allo stesso livello della
-cartella 'data' va messo il file 'metadata.json'.
+Each folder corresponds to a folder/case to be executed on the VM in the folder ../downloads/eswc-kgc-challenge-2024. The template file should be placed in the 'data' folder. The 'metadata.json' file should be placed at the same level as the 'data' folder.
