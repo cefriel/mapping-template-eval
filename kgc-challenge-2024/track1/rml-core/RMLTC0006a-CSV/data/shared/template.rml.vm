@@ -1,0 +1,2 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_cajdjcdhff = $functions.getCSVReaderFromFile("/data/shared/student.csv"))#set($foo = $reader_cajdjcdhff.setHashVariable(true))#set($foo = $reader_cajdjcdhff.setOnlyDistinct(true))#set($dataframe_cajdjcdhff = $reader_cajdjcdhff.getDataframe())#foreach($i in $dataframe_cajdjcdhff)#set($refs = [])#if($functions.checkStrings($refs))<http://example.com/BadStudent> <http://example.com/description> "Bad Student" <http://example.com/graph/student> . 
+#end#end

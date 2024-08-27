@@ -1,3 +1,5 @@
-**/data/
+**/track1/**/metrics.csv
+**/track1/**/.done
 **/outbox/
 **/target/
+**/log.txt

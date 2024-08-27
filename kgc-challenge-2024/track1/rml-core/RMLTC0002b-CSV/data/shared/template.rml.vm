@@ -1,0 +1,2 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_bcfijfbghh = $functions.getCSVReaderFromFile("/data/shared/student.csv"))#set($foo = $reader_bcfijfbghh.setHashVariable(true))#set($foo = $reader_bcfijfbghh.setOnlyDistinct(true))#set($columns = "ID,Name")#set($dataframe_bcfijfbghh = $reader_bcfijfbghh.getDataframe($columns))#foreach($i in $dataframe_bcfijfbghh)#set($refs = [${i.cecadjf}, ${i.cddb}])#if($functions.checkStrings($refs))_:$functions.encodeURIComponent("students${i.cddb}") <http://xmlns.com/foaf/0.1/name> "${i.cecadjf}" .
+#end#end

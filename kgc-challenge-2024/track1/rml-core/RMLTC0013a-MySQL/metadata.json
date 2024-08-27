@@ -17,7 +17,7 @@
         {
             "@id": "http://w3id.org/kg-construct/rml-core/test-cases/RMLTC0013a-MySQL#step2",
             "name": "Execute RML mapping",
-            "resource": "BURP",
+            "resource": "MappingTemplate",
             "command": "execute_mapping",
             "parameters": {
                 "mapping_file": "mapping.ttl",

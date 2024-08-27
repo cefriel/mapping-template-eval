@@ -1,0 +1,29 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_zbcbdjgdcf = $functions.getSQLReaderFromDatabase("jdbc:postgresql://PostgreSQL:5432/db", "root", "root"))#set($foo = $reader_zbcbdjgdcf.setHashVariable(true))#set($foo = $reader_zbcbdjgdcf.setOnlyDistinct(true))#set($columns = "id,description")#set($dataframe_zbcbdjgdcf = $reader_zbcbdjgdcf.getFilteredDataFrame("
+       SELECT * FROM Sport ;
+       ", $columns))#set($types_zbcbdjgdcf = $reader_zbcbdjgdcf.getColumnTypes("
+       SELECT * FROM Sport ;
+       "))#set($columns = $types_zbcbdjgdcf.keySet())#set($refColumns = ["id","description"])#foreach($column in $refColumns)#if(!$columns.contains($column))$error: "$column not found in $dataframe_zbcbdjgdcf."#end#end#set($reader_zbcbdjgdbb = $functions.getSQLReaderFromDatabase("jdbc:postgresql://PostgreSQL:5432/db", "root", "root"))#set($foo = $reader_zbcbdjgdbb.setHashVariable(true))#set($foo = $reader_zbcbdjgdbb.setOnlyDistinct(true))#set($columns = "id,firstname,lastname,sport_id,description")#set($dataframe_zbcbdjgdbb = $reader_zbcbdjgdbb.getFilteredDataFrame("
+       SELECT Student.ID as ID,
+              Student.FirstName as FirstName,
+              Student.LastName as LastName,
+              Sport.Description as Description,
+              Sport.ID as Sport_ID
+       FROM Student,Sport,Student_Sport
+       WHERE Student.ID = Student_Sport.ID_Student
+       AND Sport.ID = Student_Sport.ID_Sport;
+       ", $columns))#set($types_zbcbdjgdbb = $reader_zbcbdjgdbb.getColumnTypes("
+       SELECT Student.ID as ID,
+              Student.FirstName as FirstName,
+              Student.LastName as LastName,
+              Sport.Description as Description,
+              Sport.ID as Sport_ID
+       FROM Student,Sport,Student_Sport
+       WHERE Student.ID = Student_Sport.ID_Student
+       AND Sport.ID = Student_Sport.ID_Sport;
+       "))#set($columns = $types_zbcbdjgdbb.keySet())#set($refColumns = ["id","firstname","lastname","sport_id","description"])#foreach($column in $refColumns)#if(!$columns.contains($column))$error: "$column not found in $dataframe_zbcbdjgdbb."#end#end#foreach($i in $dataframe_zbcbdjgdcf)#set($refs = [${i.ddff}, ${i.zbhcefegafc}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.ddff}/${i.zbhcefegafc}")> <http://example.com/description> $functions.resolveSQLDatatype("${i.zbhcefegafc}", $types_zbcbdjgdcf.get("description")) .
+#end#set($refs = [${i.ddff}, ${i.zbhcefegafc}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.ddff}/${i.zbhcefegafc}")> <http://example.com/id> $functions.resolveSQLDatatype("${i.ddff}", $types_zbcbdjgdcf.get("id")) .
+#end#end#foreach($i in $dataframe_zbcbdjgdbb)#set($refs = [${i.ddff}, ${i.zbidceajgfi}, ${i.bddhiijih}, ${i.zbhcefegafc}, ${i.zbefigegejf}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.ddff}/${i.bddhiijih};${i.zbefigegejf}")> <http://example.com/plays> <$functions.resolveIRI("http://example.com/${i.zbidceajgfi}/${i.zbhcefegafc}")> .
+#end#set($refs = [${i.ddff}, ${i.bddhiijih}, ${i.zbefigegejf}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.ddff}/${i.bddhiijih};${i.zbefigegejf}")> <http://example.com/id> $functions.resolveSQLDatatype("${i.ddff}", $types_zbcbdjgdbb.get("id")) .
+#end#set($refs = [${i.ddff}, ${i.bddhiijih}, ${i.zbefigegejf}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.ddff}/${i.bddhiijih};${i.zbefigegejf}")> <http://example.com/lastName> $functions.resolveSQLDatatype("${i.zbefigegejf}", $types_zbcbdjgdbb.get("lastname")) .
+#end#set($refs = [${i.ddff}, ${i.bddhiijih}, ${i.zbefigegejf}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.ddff}/${i.bddhiijih};${i.zbefigegejf}")> <http://example.com/firstName> $functions.resolveSQLDatatype("${i.bddhiijih}", $types_zbcbdjgdbb.get("firstname")) .
+#end#end

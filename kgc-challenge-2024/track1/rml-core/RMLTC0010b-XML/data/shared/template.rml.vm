@@ -1,0 +1,5 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_bcggcfbgi = $functions.getXMLReaderFromFile("/data/shared/country_info.xml"))#set($foo = $reader_bcggcfbgi.setOnlyDistinct(true))  #set($dataframe_bcggcfbgi = $reader_bcggcfbgi.getDataframe('for $i in /countries/country
+    return map {
+"bjaiabfdj": $i/CountryCode/text(),
+"cecadjf": $i/Name/text() }'))#foreach($i in $dataframe_bcggcfbgi)#set($refs = [${i.cecadjf}, ${i.bjaiabfdj}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.bjaiabfdj}/${i.cecadjf}")> <http://example.com/name> "${i.cecadjf}" .
+#end#end

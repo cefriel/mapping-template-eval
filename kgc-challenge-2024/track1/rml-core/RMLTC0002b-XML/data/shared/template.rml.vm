@@ -1,0 +1,5 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_bdajcgdeef = $functions.getXMLReaderFromFile("/data/shared/student.xml"))#set($foo = $reader_bdajcgdeef.setOnlyDistinct(true))  #set($dataframe_bdajcgdeef = $reader_bdajcgdeef.getDataframe('for $i in /students/student
+    return map {
+"cddb": $i/ID/text(),
+"cecadjf": $i/Name/text() }'))#foreach($i in $dataframe_bdajcgdeef)#set($refs = [${i.cecadjf}, ${i.cddb}])#if($functions.checkStrings($refs))_:$functions.encodeURIComponent("students${i.cddb}") <http://xmlns.com/foaf/0.1/name> "${i.cecadjf}" .
+#end#end

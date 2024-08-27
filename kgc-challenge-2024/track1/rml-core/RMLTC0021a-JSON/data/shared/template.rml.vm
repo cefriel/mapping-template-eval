@@ -1,0 +1,7 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_zcahabbdbif = $functions.getJSONReaderFromFile("/data/shared/student.json"))   #set($dataframe_zcahabbdbif = $reader_zcahabbdbif.getDataframe('{
+    "iterator": "$.students[*]",
+    "paths": {
+"iaajjbfg": "Sport",
+"cddb": "ID",
+"cecadjf": "Name" }}'))#if(!$dataframe_join_icccejaef)#set($dataframe_join_icccejaef = $functions.getListMap($dataframe_zcahabbdbif, "iaajjbfg"))#end#foreach($i in $dataframe_zcahabbdbif)#if($functions.checkString($i.iaajjbfg))#foreach($j in $dataframe_join_icccejaef.get($i.iaajjbfg))#set($refs = [${i.cecadjf}, ${j.cecadjf}, ${i.cddb}, ${j.cddb}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/Student/${i.cddb}/${i.cecadjf}")> <http://example.com/sameSportAs> <$functions.resolveIRI("http://example.com/Student/${j.cddb}/${j.cecadjf}")> .
+#end#end#end#end

@@ -1,0 +1,2 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_bffbebdjad = $functions.getCSVReaderFromFile("/data/shared/persons.csv"))#set($foo = $reader_bffbebdjad.setHashVariable(true))#set($foo = $reader_bffbebdjad.setOnlyDistinct(true))#set($columns = "FirstName")#set($dataframe_bffbebdjad = $reader_bffbebdjad.getDataframe($columns))#foreach($i in $dataframe_bffbebdjad)#set($refs = [${i.cbdgiadged}])#if($functions.checkStrings($refs))<$functions.resolveIRI("${i.cbdgiadged}")> <http://xmlns.com/foaf/0.1/name> "${i.cbdgiadged}" .
+#end#end

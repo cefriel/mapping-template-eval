@@ -1,0 +1,11 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_zcbaeagdjgi = $functions.getXMLReaderFromFile("/data/shared/sport.xml"))#set($foo = $reader_zcbaeagdjgi.setOnlyDistinct(true))  #set($dataframe_zcbaeagdjgi = $reader_zcbaeagdjgi.getDataframe('for $i in /sports/sport
+    return map {
+"cddb": $i/ID/text(),
+"cecadjf": $i/Name/text() }'))#set($reader_zcbaeagdjcb = $functions.getXMLReaderFromFile("/data/shared/student.xml"))#set($foo = $reader_zcbaeagdjcb.setOnlyDistinct(true))   #set($dataframe_zcbaeagdjcb = $reader_zcbaeagdjcb.getDataframe('for $i in /students/student
+    return map {
+"cddb": $i/ID/text(),
+"cecadjf": $i/Name/text(),
+"iaajjbfg": $i/Sport/text() }'))#if(!$dataframe_join_jcebcfejj)#set($dataframe_join_jcebcfejj = $functions.getListMap($dataframe_zcbaeagdjgi, "cddb"))#end#foreach($i in $dataframe_zcbaeagdjgi)#set($refs = [${i.cecadjf}, ${i.cddb}, ${esc.h}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/resource/sport_${i.cddb}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> "${i.cecadjf}" .
+#end#end#foreach($i in $dataframe_zcbaeagdjcb)#set($refs = [${i.cecadjf}, ${i.cddb}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/resource/student_${i.cddb}")> <http://xmlns.com/foaf/0.1/name> "${i.cecadjf}" .
+#end#if($functions.checkString($i.iaajjbfg))#foreach($j in $dataframe_join_jcebcfejj.get($i.iaajjbfg))#set($refs = [${i.cddb}, ${j.cddb}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/resource/student_${i.cddb}")> <http://example.com/ontology/practises> <$functions.resolveIRI("http://example.com/resource/sport_${j.cddb}")> .
+#end#end#end#end

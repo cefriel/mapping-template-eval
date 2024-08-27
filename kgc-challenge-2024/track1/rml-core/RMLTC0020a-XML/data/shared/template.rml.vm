@@ -1,0 +1,4 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_bfdhidbdjf = $functions.getXMLReaderFromFile("/data/shared/student.xml"))#set($foo = $reader_bfdhidbdjf.setOnlyDistinct(true)) #set($dataframe_bfdhidbdjf = $reader_bfdhidbdjf.getDataframe('for $i in /students/student
+    return map {
+"cecadjf": $i/Name/text() }'))#foreach($i in $dataframe_bfdhidbdjf)#set($refs = [${i.cecadjf}, ${esc.h}])#if($functions.checkStrings($refs))<http://example.com/base/$functions.encodeURIComponent("${i.cecadjf}")> <$functions.resolveIRI("http://www.w3.org/1999/02/22-rdf-syntax-ns${esc.h}type")> <http://xmlns.com/foaf/0.1/Person> .
+#end#end

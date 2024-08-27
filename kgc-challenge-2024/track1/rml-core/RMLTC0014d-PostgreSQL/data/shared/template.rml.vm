@@ -1,0 +1,14 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_zbbjiajaicf = $functions.getSQLReaderFromDatabase("jdbc:postgresql://PostgreSQL:5432/db", "root", "root"))#set($foo = $reader_zbbjiajaicf.setHashVariable(true))#set($foo = $reader_zbbjiajaicf.setOnlyDistinct(true))#set($columns = "empno,role")#set($dataframe_zbbjiajaicf = $reader_zbbjiajaicf.getFilteredDataFrame("
+      SELECT EMP.*, (CASE job
+        WHEN 'CLERK' THEN 'general-office'
+        WHEN 'NIGHTGUARD' THEN 'security'
+        WHEN 'ENGINEER' THEN 'engineering'
+      END) AS ROLE FROM EMP
+    ", $columns))#set($types_zbbjiajaicf = $reader_zbbjiajaicf.getColumnTypes("
+      SELECT EMP.*, (CASE job
+        WHEN 'CLERK' THEN 'general-office'
+        WHEN 'NIGHTGUARD' THEN 'security'
+        WHEN 'ENGINEER' THEN 'engineering'
+      END) AS ROLE FROM EMP
+    "))#set($columns = $types_zbbjiajaicf.keySet())#set($refColumns = ["empno","role"])#foreach($column in $refColumns)#if(!$columns.contains($column))$error: "$column not found in $dataframe_zbbjiajaicf."#end#end#foreach($i in $dataframe_zbbjiajaicf)#set($refs = [${i.jggddjjd}, ${esc.h}, ${i.dfagcje}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://data.example.com/employee/${i.jggddjjd}")> <$functions.resolveIRI("http://example.com/ns${esc.h}role")> <$functions.resolveIRI("http://data.example.com/roles/${i.dfagcje}")> .
+#end#end

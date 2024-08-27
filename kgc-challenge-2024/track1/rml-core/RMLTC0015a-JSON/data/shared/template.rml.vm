@@ -1,0 +1,11 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_jjdbehjjb = $functions.getJSONReaderFromFile("/data/shared/country_en.json"))  #set($dataframe_jjdbehjjb = $reader_jjdbehjjb.getDataframe('{
+    "iterator": "$.countries[*]",
+    "paths": {
+"cbafigj": "Code",
+"cecadjf": "Name" }}'))#set($reader_jjdbehjjg = $functions.getJSONReaderFromFile("/data/shared/country_es.json"))  #set($dataframe_jjdbehjjg = $reader_jjdbehjjg.getDataframe('{
+    "iterator": "$.countries[*]",
+    "paths": {
+"cbafigj": "Code",
+"cecadjf": "Name" }}'))#foreach($i in $dataframe_jjdbehjjb)#set($refs = [${i.cbafigj}, ${i.cecadjf}, ${esc.h}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.cbafigj}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> $functions.resolveLanguage("${i.cecadjf}","en") .
+#end#end#foreach($i in $dataframe_jjdbehjjg)#set($refs = [${i.cbafigj}, ${i.cecadjf}, ${esc.h}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.cbafigj}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> $functions.resolveLanguage("${i.cecadjf}","es") .
+#end#end

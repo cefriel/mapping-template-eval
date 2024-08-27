@@ -1,0 +1,13 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_zjbdibgai = $functions.getXMLReaderFromFile("/data/shared/sport.xml"))#set($foo = $reader_zjbdibgai.setOnlyDistinct(true))  #set($dataframe_zjbdibgai = $reader_zjbdibgai.getDataframe('for $i in /sports/sport
+    return map {
+"cddb": $i/ID/text(),
+"cecadjf": $i/Name/text() }'))#set($reader_zjbdibgbg = $functions.getXMLReaderFromFile("/data/shared/student.xml"))#set($foo = $reader_zjbdibgbg.setOnlyDistinct(true))   #set($dataframe_zjbdibgbg = $reader_zjbdibgbg.getDataframe('for $i in /students/student
+    return map {
+"cddb": $i/ID/text(),
+"iaajjbfg": $i/Sport/text(),
+"cecadjf": $i/Name/text() }'))#if(!$dataframe_join_zbjbidhhadh)#set($dataframe_join_zbjbidhhadh = $functions.getListMap($dataframe_zjbdibgai, "cddb"))#end#foreach($i in $dataframe_zjbdibgai)<$functions.resolveIRI("http://example.com/resource/sport_${i.cddb}")> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/ontology/Sport> <http://example.com/graph/sports>.
+#set($refs = [${i.cecadjf}, ${i.cddb}, ${esc.h}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/resource/sport_${i.cddb}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> "${i.cecadjf}" <http://example.com/graph/sports> . 
+#end#end#foreach($i in $dataframe_zjbdibgbg)<$functions.resolveIRI("http://example.com/resource/student_${i.cddb}")> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/ontology/Student> <http://example.com/graph/students>.
+#if($functions.checkString($i.iaajjbfg))#foreach($j in $dataframe_join_zbjbidhhadh.get($i.iaajjbfg))#set($refs = [${i.cddb}, ${j.cddb}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/resource/student_${i.cddb}")> <http://example.com/ontology/practises> <$functions.resolveIRI("http://example.com/resource/sport_${j.cddb}")> <http://example.com/graph/students> .
+#end#end#end#set($refs = [${i.cecadjf}, ${i.cddb}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/resource/student_${i.cddb}")> <http://xmlns.com/foaf/0.1/name> "${i.cecadjf}" <http://example.com/graph/students> . 
+#end#end

@@ -1,0 +1,19 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_ebhddabhb = $functions.getSQLReaderFromDatabase("jdbc:postgresql://PostgreSQL:5432/db", "root", "root"))#set($foo = $reader_ebhddabhb.setHashVariable(true))#set($foo = $reader_ebhddabhb.setOnlyDistinct(true))#set($columns = "code,name")#set($dataframe_ebhddabhb = $reader_ebhddabhb.getFilteredDataFrame("
+        SELECT Code, Name, Lan
+        FROM Country
+        WHERE Lan = 'EN';
+       ", $columns))#set($types_ebhddabhb = $reader_ebhddabhb.getColumnTypes("
+        SELECT Code, Name, Lan
+        FROM Country
+        WHERE Lan = 'EN';
+       "))#set($columns = $types_ebhddabhb.keySet())#set($refColumns = ["code","name"])#foreach($column in $refColumns)#if(!$columns.contains($column))$error: "$column not found in $dataframe_ebhddabhb."#end#end#set($reader_ebhddabci = $functions.getSQLReaderFromDatabase("jdbc:postgresql://PostgreSQL:5432/db", "root", "root"))#set($foo = $reader_ebhddabci.setHashVariable(true))#set($foo = $reader_ebhddabci.setOnlyDistinct(true))#set($columns = "code,name")#set($dataframe_ebhddabci = $reader_ebhddabci.getFilteredDataFrame("
+        SELECT Code, Name, Lan
+        FROM Country
+        WHERE Lan = 'ES';
+       ", $columns))#set($types_ebhddabci = $reader_ebhddabci.getColumnTypes("
+        SELECT Code, Name, Lan
+        FROM Country
+        WHERE Lan = 'ES';
+       "))#set($columns = $types_ebhddabci.keySet())#set($refColumns = ["code","name"])#foreach($column in $refColumns)#if(!$columns.contains($column))$error: "$column not found in $dataframe_ebhddabci."#end#end#foreach($i in $dataframe_ebhddabhb)#set($refs = [${esc.h}, ${i.ddhdhah}, ${i.dafjbib}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.dafjbib}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> $functions.resolveLanguage($functions.resolveSQLDatatype("${i.ddhdhah}", $types_ebhddabhb.get("name")),"en") .
+#end#end#foreach($i in $dataframe_ebhddabci)#set($refs = [${esc.h}, ${i.ddhdhah}, ${i.dafjbib}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.dafjbib}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> $functions.resolveLanguage($functions.resolveSQLDatatype("${i.ddhdhah}", $types_ebhddabci.get("name")),"es") .
+#end#end

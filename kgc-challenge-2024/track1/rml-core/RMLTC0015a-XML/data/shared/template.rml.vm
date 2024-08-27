@@ -1,0 +1,9 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_zchbbdjeji = $functions.getXMLReaderFromFile("/data/shared/country_en.xml"))#set($foo = $reader_zchbbdjeji.setOnlyDistinct(true))  #set($dataframe_zchbbdjeji = $reader_zchbbdjeji.getDataframe('for $i in /countries/country
+    return map {
+"cbafigj": $i/Code/text(),
+"cecadjf": $i/Name/text() }'))#set($reader_zchbbdjfec = $functions.getXMLReaderFromFile("/data/shared/country_es.xml"))#set($foo = $reader_zchbbdjfec.setOnlyDistinct(true))  #set($dataframe_zchbbdjfec = $reader_zchbbdjfec.getDataframe('for $i in /countries/country
+    return map {
+"cbafigj": $i/Code/text(),
+"cecadjf": $i/Name/text() }'))#foreach($i in $dataframe_zchbbdjeji)#set($refs = [${i.cbafigj}, ${i.cecadjf}, ${esc.h}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.cbafigj}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> $functions.resolveLanguage("${i.cecadjf}","en") .
+#end#end#foreach($i in $dataframe_zchbbdjfec)#set($refs = [${i.cbafigj}, ${i.cecadjf}, ${esc.h}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.cbafigj}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> $functions.resolveLanguage("${i.cecadjf}","es") .
+#end#end

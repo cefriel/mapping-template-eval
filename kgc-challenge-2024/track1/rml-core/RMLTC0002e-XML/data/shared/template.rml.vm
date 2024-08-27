@@ -1,0 +1,6 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_zbbbigcibhf = $functions.getXMLReaderFromFile("/data/shared/student2.xml"))#set($foo = $reader_zbbbigcibhf.setOnlyDistinct(true))   #set($dataframe_zbbbigcibhf = $reader_zbbbigcibhf.getDataframe('for $i in /students/student
+    return map {
+"cddb": $i/ID/text(),
+"cecadjf": $i/Name/text(),
+"hcdhg": $i/IDs/text() }'))#foreach($i in $dataframe_zbbbigcibhf)#set($refs = [${i.cecadjf}, ${i.hcdhg}, ${i.cddb}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.cddb}/${i.cecadjf}")> <http://example.com/id> "${i.hcdhg}" .
+#end#end

@@ -1,0 +1,7 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_hagcdcbhd = $functions.getXMLReaderFromFile("/data/shared/ious.xml"))#set($foo = $reader_hagcdcbhd.setOnlyDistinct(true))   #set($dataframe_hagcdcbhd = $reader_hagcdcbhd.getDataframe('for $i in /persons/person
+    return map {
+"bjcjidifbd": $i/@fname,
+"bjdfdhjgdj": $i/@lname,
+"zeeibjcdga": $i/@amount }'))#foreach($i in $dataframe_hagcdcbhd)<$functions.resolveIRI("http://example.com/${i.bjcjidifbd};${i.bjdfdhjgdj}")> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+#set($refs = [${i.bjcjidifbd}, ${i.bjdfdhjgdj}, ${i.zeeibjcdga}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.bjcjidifbd};${i.bjdfdhjgdj}")> <http://example.com/owes> "${i.zeeibjcdga}" .
+#end#end

@@ -1,0 +1,19 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_zbgejicgiia = $functions.getSQLReaderFromDatabase("jdbc:mysql://MySQL:3306/db", "root", "root"))#set($foo = $reader_zbgejicgiia.setHashVariable(true))#set($foo = $reader_zbgejicgiia.setOnlyDistinct(true))#set($columns = "Code,Name")#set($dataframe_zbgejicgiia = $reader_zbgejicgiia.getFilteredDataFrame("
+        SELECT Code, Name, Lan
+        FROM Country
+        WHERE Lan = 'ES';
+       ", $columns))#set($types_zbgejicgiia = $reader_zbgejicgiia.getColumnTypes("
+        SELECT Code, Name, Lan
+        FROM Country
+        WHERE Lan = 'ES';
+       "))#set($columns = $types_zbgejicgiia.keySet())#set($refColumns = ["Code","Name"])#foreach($column in $refColumns)#if(!$columns.contains($column))$error: "$column not found in $dataframe_zbgejicgiia."#end#end#set($reader_zbgejicgihg = $functions.getSQLReaderFromDatabase("jdbc:mysql://MySQL:3306/db", "root", "root"))#set($foo = $reader_zbgejicgihg.setHashVariable(true))#set($foo = $reader_zbgejicgihg.setOnlyDistinct(true))#set($columns = "Code,Name")#set($dataframe_zbgejicgihg = $reader_zbgejicgihg.getFilteredDataFrame("
+        SELECT Code, Name, Lan
+        FROM Country
+        WHERE Lan = 'EN';
+       ", $columns))#set($types_zbgejicgihg = $reader_zbgejicgihg.getColumnTypes("
+        SELECT Code, Name, Lan
+        FROM Country
+        WHERE Lan = 'EN';
+       "))#set($columns = $types_zbgejicgihg.keySet())#set($refColumns = ["Code","Name"])#foreach($column in $refColumns)#if(!$columns.contains($column))$error: "$column not found in $dataframe_zbgejicgihg."#end#end#foreach($i in $dataframe_zbgejicgiia)#set($refs = [${i.cbafigj}, ${i.cecadjf}, ${esc.h}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.cbafigj}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> $functions.resolveLanguage($functions.resolveSQLDatatype("${i.cecadjf}", $types_zbgejicgiia.get("Name")),"es") .
+#end#end#foreach($i in $dataframe_zbgejicgihg)#set($refs = [${i.cbafigj}, ${i.cecadjf}, ${esc.h}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.cbafigj}")> <$functions.resolveIRI("http://www.w3.org/2000/01/rdf-schema${esc.h}label")> $functions.resolveLanguage($functions.resolveSQLDatatype("${i.cecadjf}", $types_zbgejicgihg.get("Name")),"en") .
+#end#end

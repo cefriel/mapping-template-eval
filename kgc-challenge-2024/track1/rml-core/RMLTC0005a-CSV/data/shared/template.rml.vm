@@ -1,0 +1,3 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_cgjhbchgc = $functions.getCSVReaderFromFile("/data/shared/ious.csv"))#set($foo = $reader_cgjhbchgc.setHashVariable(true))#set($foo = $reader_cgjhbchgc.setOnlyDistinct(true))#set($columns = "fname,lname,amount")#set($dataframe_cgjhbchgc = $reader_cgjhbchgc.getDataframe($columns))#foreach($i in $dataframe_cgjhbchgc)<$functions.resolveIRI("http://example.com/${i.jhfhciej};${i.badbbdjhf}")> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
+#set($refs = [${i.jhfhciej}, ${i.badbbdjhf}, ${i.zbebdifdajg}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.jhfhciej};${i.badbbdjhf}")> <http://example.com/owes> "${i.zbebdifdajg}" .
+#end#end

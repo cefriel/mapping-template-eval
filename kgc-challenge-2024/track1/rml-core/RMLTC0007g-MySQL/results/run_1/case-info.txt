@@ -1,0 +1,40 @@
+===> CASE <===
+Name: rml-core test-case RMLTC0007g-MySQL
+Timestamp: 2024-08-26T16:44:59.434574+00:00
+Directory: /mnt/c/Users/scrocca/Downloads/challenge-tool/challenge-tool/challenge/track1/rml-core/RMLTC0007g-MySQL
+Run: 1
+Number of steps: 3
+
+===> HARDWARE <===
+System
+	Hostname: SCROCCA-840G9
+	OS name: BOH
+	OS version: BOH
+	Kernel: Linux-5.15.153.1-microsoft-standard-WSL2-x86_64-with-glibc2.35
+	Architecture: x86_64
+CPU
+	Name: 12th Gen Intel(R) Core(TM) i7-1260P
+	Cores: 16
+	Minimum frequency: 0 Hz
+	Maximum frequency: 0 Hz
+Memory
+	RAM memory: 16582 MB
+	SWAP memory: 4294 MB
+Storage
+	Disk "/": 1081.1 GB
+	Disk "/mnt/wslg/distro": 1081.1 GB
+	Disk "/snap": 1081.1 GB
+Network
+	Interface "lo"
+	Interface "eth0": 10000 mbps
+	Interface "br-63b05a64a602"
+	Interface "br-6957ce300049"
+	Interface "docker0": 10000 mbps
+	Interface "veth81c4358": 10000 mbps
+
+===> DOCKER <===
+Version: 24.0.7
+Root directory: /var/lib/docker
+Drivers:
+	Storage: overlay2
+	CgroupFS: cgroupfs v1

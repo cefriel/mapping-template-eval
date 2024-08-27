@@ -1,0 +1,13 @@
+#set($foo = $functions.setBaseIRI("http://example.com/base/"))#set($reader_zbfiaebdeea = $functions.getJSONReaderFromFile("/data/shared/student.json"))  #set($dataframe_zbfiaebdeea = $reader_zbfiaebdeea.getDataframe('{
+    "iterator": "$.students[*]",
+    "paths": {
+"cddb": "ID",
+"cecadjf": "Name" }}'))#set($reader_zbfiaebddjc = $functions.getJSONReaderFromFile("/data/shared/student.json")) #set($dataframe_zbfiaebddjc = $reader_zbfiaebddjc.getDataframe('{
+    "iterator": "$.students[*]",
+    "paths": {
+"iaajjbfg": "Sport" }}'))#if(!$dataframe_join_zbfiaebddjc)#set($dataframe_join_zbfiaebddjc = $dataframe_zbfiaebddjc)#end#foreach($i in $dataframe_zbfiaebdeea)#foreach($j in $dataframe_join_zbfiaebddjc)#set($refs = [${i.cecadjf}, ${j.iaajjbfg}, ${i.cddb}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/Student/${i.cddb}/${i.cecadjf}")> <http://example.com/Sport> <$functions.resolveIRI("http://example.com/${j.iaajjbfg}")> .
+#end#end#set($refs = [${i.cecadjf}, ${i.cddb}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/Student/${i.cddb}/${i.cecadjf}")> <http://example.com/id> "${i.cddb}" .
+#end#set($refs = [${i.cecadjf}, ${i.cddb}, ${esc.h}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/Student/${i.cddb}/${i.cecadjf}")> <$functions.resolveIRI("http://www.w3.org/1999/02/22-rdf-syntax-ns${esc.h}type")> <http://xmlns.com/foaf/0.1/Person> .
+#end#set($refs = [${i.cecadjf}, ${i.cddb}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/Student/${i.cddb}/${i.cecadjf}")> <http://xmlns.com/foaf/0.1/name> "${i.cecadjf}" .
+#end#end#foreach($i in $dataframe_zbfiaebddjc)#set($refs = [${esc.h}, ${i.iaajjbfg}])#if($functions.checkStrings($refs))<$functions.resolveIRI("http://example.com/${i.iaajjbfg}")> <$functions.resolveIRI("http://www.w3.org/1999/02/22-rdf-syntax-ns${esc.h}type")> <http://example.com/activity/Sport> .
+#end#end

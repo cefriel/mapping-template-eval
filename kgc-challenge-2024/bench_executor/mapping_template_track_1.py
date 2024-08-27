@@ -3,9 +3,6 @@
 """
 The MappingTemplate executes RML rules to generate high quality Linked Data
 from multiple originally (semi-)structured data sources.
-
-**Website**: https://rml.io<br>
-**Repository**: https://github.com/RMLio/rmlmapper-java
 """
 
 import os
@@ -72,46 +69,13 @@ class MappingTemplate(Container):
         success : bool
             Whether the execution was successfull or not.
         """
-        # FIXME this is something that is necessary for the RMLmapper, do we also need it?
 
-        # Set Java heap to 1/2 of available memory instead of the default 1/4
-        max_heap = int(psutil.virtual_memory().total * (1/2))
-
-        # FIXME this is something that is necessary for the RMLmapper, do we also need it?
-        # Execute command
-        # cmd = f'java -Xmx{max_heap} -Xms{max_heap}' + \
         cmd = 'java -jar /mapping-template/mapping-template.jar'
         if self._verbose:
             cmd += ' --verbose'
         cmd += f' {" ".join(arguments)}'
 
-        input_expect_failure = self._expect_failure
-        self._expect_failure = False
-
-        prepare_cmd = "cp -a /opt/rml/. /data/shared/"
-        if not self.run_and_wait_for_exit(prepare_cmd):
-            return False
-        # run translation
-        self._logger.debug(f'Executed prepare command: '
-                           f'{" ".join(prepare_cmd)}')
-
-        translation_cmd = "java -jar /mapping-template/mapping-template.jar"
-        translation_cmd_args = ['-i', os.path.join('/data/shared/', 'mapping.ttl'),
-                                '-if', 'rdf',
-                                '-t', os.path.join('/data/shared/', 'rml-compiler.vm'),
-                                '-o', os.path.join('/data/shared/', 'template.vm'),
-                                '-fun', os.path.join('/data/shared/', 'RMLCompilerUtils.java')]
-        translation_cmd += f' {" ".join(translation_cmd_args)}'        
-        print(translation_cmd)
-
-        # run translation
-        self._logger.debug(f'Executing MappingTemplate translation from rml to vm with command: '
-                           f'{" ".join(translation_cmd)}')
-
-        if not self.run_and_wait_for_exit(translation_cmd):
-            return False
-        
-        self._expect_failure = input_expect_failure
+        print(cmd)
         
         self._logger.debug(f'Executing MappingTemplate with arguments '
                            f'{" ".join(arguments)}')
@@ -145,11 +109,13 @@ class MappingTemplate(Container):
                         input_format: Optional[str] = None,
                         input_file: Optional[str] = None,
                         output_formatter: Optional[str] = None,
+                        serialization: Optional[str] = None,
                         rdb_username: Optional[str] = None,
                         rdb_password: Optional[str] = None,
                         rdb_host: Optional[str] = None,
                         rdb_port: Optional[int] = None,
-                        rdb_name: Optional[str] = None) -> bool:
+                        rdb_name: Optional[str] = None,
+                        rdb_type: Optional[str] = None) -> bool:
         """Execute a mapping file with MappingTemplate.
 
         Parameters
@@ -181,9 +147,12 @@ class MappingTemplate(Container):
         success : bool
             Whether the execution was successfull or not.
         """
-        arguments = [ '-t', os.path.join('/data/shared/', mapping_file),
-                      '-o', os.path.join('/data/shared/', output_file),  
-                      '-fir', '-f', 'nq']
+
+        arguments = [ '-b', '/data/shared/',
+                      '-t', mapping_file,
+                      '-o', output_file,
+                      '-iri', 'http://example.com/base/',
+                      '-rml', '-fir', '--trim'] #, '-f', 'nq']
 
         if input_format is not None:
             arguments.append(f'-if {input_format}')
@@ -207,6 +176,8 @@ class MappingTemplate(Container):
             arguments.append(rdb_url)
             arguments.append('-id')
             arguments.append(rdb_name)
+
+        print(arguments)
 
         return self.execute(arguments)
 
