@@ -1,3 +1,0 @@
-* Instructions
-
-Each folder corresponds to a folder/case to be executed on the VM in the folder ../downloads/eswc-kgc-challenge-2024. The template file should be placed in the 'data' folder. The 'metadata.json' file should be placed at the same level as the 'data' folder.

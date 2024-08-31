@@ -1,0 +1,6 @@
+mapping,engine,elapsed_time,memory_max,cpu_usage
+scale-1,mapping-template,3.84,1130000,0.84
+scale-1,mapping-template-rml-mtl,9.08,3379363,15.05
+scale-1,mapping-template-rml,11.77,3721326,24.54
+
+
